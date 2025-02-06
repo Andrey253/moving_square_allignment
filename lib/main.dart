@@ -43,13 +43,21 @@ class SquareAnimationState extends State<SquareAnimation> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AnimatedContainerCustom(aligmentX: aligmentX, onEndAnimation: onEndAnimation),
+        AnimatedContainerCustom(
+          aligmentX: aligmentX,
+          onEndAnimation: onEndAnimation,
+        ),
         const SizedBox(height: 16),
         ButtonsLeftRight(
-            buttonsEnable: buttonsEnable, moveToLeft: moveToLeft, moveToRight: moveToRight, goToLeft: goToLeft),
+          buttonsEnable: buttonsEnable,
+          moveToLeft: moveToLeft,
+          moveToRight: moveToRight,
+          goToLeft: goToLeft,
+        ),
       ],
     );
   }
+
   /// When [goToLeft] is Null both buttons are active
 
   /// Set the parameters for moving to the right.
