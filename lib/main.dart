@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:moving_square_allignment/widgets/anim_container.dart';
+import 'package:moving_square_allignment/widgets/buttons.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,9 +30,6 @@ class SquareAnimation extends StatefulWidget {
 }
 
 class SquareAnimationState extends State<SquareAnimation> {
-  /// Square size.
-  static const _squareSize = 50.0;
-
   /// If [goToLeft] equals true then move left.
   /// If [goToLeft] equals false then move right.
   /// If [goToLeft] is null, then square in the center.
@@ -44,60 +43,38 @@ class SquareAnimationState extends State<SquareAnimation> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AnimatedContainer(
-          /// Fumction aligmentX() calculates alignment.
-          alignment: Alignment(aligmentX(), 0),
-          onEnd: onEndAnimation,
-          duration: Duration(seconds: 1),
-          child: Container(
-            width: _squareSize,
-            height: _squareSize,
-            decoration: BoxDecoration(
-              color: Colors.red,
-              border: Border.all(),
-            ),
-          ),
-        ),
+        AnimatedContainerCustom(aligmentX: aligmentX, onEndAnimation: onEndAnimation),
         const SizedBox(height: 16),
-        Row(
-          children: [
-            ElevatedButton(
-              /// While the square is moving, the function moveToLeft cannot execute.
-              onPressed: buttonsEnable ? moveToLeft : () {},
-
-              /// If the button is not active, the background is gray.
-              style: ElevatedButton.styleFrom(backgroundColor: buttonsEnable ? null : Colors.grey),
-              child: const Text('Left'),
-            ),
-            const SizedBox(width: 8),
-            ElevatedButton(
-              /// While the square is moving, the function moveToRight cannot execute.
-              onPressed: buttonsEnable ? moveToRight : () {},
-
-              /// If the button is not active, the background is gray.
-              style: ElevatedButton.styleFrom(backgroundColor: buttonsEnable ? null : Colors.grey),
-              child: const Text('Right'),
-            ),
-          ],
-        ),
+        ButtonsLeftRight(
+            buttonsEnable: buttonsEnable, moveToLeft: moveToLeft, moveToRight: moveToRight, goToLeft: goToLeft),
       ],
     );
   }
+  /// When [goToLeft] is Null both buttons are active
 
   /// Set the parameters for moving to the right.
-  void moveToRight() => setState(() {
-        if (goToLeft == true || goToLeft == null) buttonsEnable = false;
-        goToLeft = false;
-      });
-/// Set the parameters for moving to the left.
-  void moveToLeft() => setState(() {
-        if (goToLeft == false || goToLeft == null) buttonsEnable = false;
-        goToLeft = true;
-      });
-///At the end of the animation, activate the buttons.
+  /// If at the end of the animation, the direction to the left ([goToLeft] == true) is set, then the right button does not perform any actions.
+  void moveToRight() => goToLeft == true || goToLeft == null
+      ? setState(() {
+          if (goToLeft == true || goToLeft == null) buttonsEnable = false;
+          goToLeft = false;
+        })
+      : null;
+
+  /// Set the parameters for moving to the left.
+  /// If at the end of the animation, the direction to the right ([goToLeft] == false) is set, then the lrft button does not perform any actions.
+  void moveToLeft() => goToLeft == false || goToLeft == null
+      ? setState(() {
+          if (goToLeft == false || goToLeft == null) buttonsEnable = false;
+          goToLeft = true;
+        })
+      : null;
+
+  /// At the end of the animation, activate the buttons.
   void onEndAnimation() => setState(() {
         buttonsEnable = true;
       });
+
   /// Сalculates alignment on x.
   double aligmentX() {
     if (goToLeft == null) return 0;
