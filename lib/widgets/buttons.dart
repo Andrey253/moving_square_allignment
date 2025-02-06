@@ -19,7 +19,7 @@ final bool? goToLeft;
               onPressed: buttonsEnable ? moveToLeft : () {},
 
               /// If the button is not active, the background is gray.
-              style: ElevatedButton.styleFrom(backgroundColor: buttonsEnable && goToLeft== false ? null : Colors.grey),
+              style: ElevatedButton.styleFrom(backgroundColor: buttonsEnable && goToLeft!= true ? null : Colors.grey),
               child: const Text('Left'),
             ),
             const SizedBox(width: 8),
@@ -28,7 +28,7 @@ final bool? goToLeft;
               onPressed: buttonsEnable ? moveToRight : () {},
 
               /// If the button is not active, the background is gray.
-              style: ElevatedButton.styleFrom(backgroundColor: buttonsEnable && goToLeft==true ? null : Colors.grey),
+              style: ElevatedButton.styleFrom(backgroundColor: buttonsEnable && goToLeft!=false ? null : Colors.grey),
               child: const Text('Right'),
             ),
           ],
